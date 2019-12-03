@@ -6,13 +6,7 @@ import org.junit.runner.Result
 import org.junit.runner.notification.RunListener
 import java.io.OutputStream
 
-class TestListener : RunListener() {
-    lateinit var result : Result
 
-    override fun testRunFinished(result: Result){
-        this.result = result
-    }
-}
 
 class Main {
     companion object {
@@ -20,12 +14,7 @@ class Main {
         fun main(args: Array<String>) {
             val startTime = System.currentTimeMillis()
 
-            val junit = JUnitCore()
-            val listener = TestListener()
-            junit.addListener(listener)
-            junit.run(StateMachineTest::class.java)
-
-            val res = Response().createString(startTime, listener.result)
+            val res = RunTests().getStringResult(startTime)
             println(res)
         }
     }
@@ -34,13 +23,7 @@ class Main {
         val startTime = System.currentTimeMillis()
         val mapper = jacksonObjectMapper()
 
-        val junit = JUnitCore()
-        val listener = TestListener()
-        junit.addListener(listener)
-        junit.run(StateMachineTest::class.java)
-
-        val res = Response().createJson(startTime, listener.result)
-
+        val res = RunTests().getJsonResult(startTime)
         mapper.writeValue(output, res)
     }
 }
