@@ -15,6 +15,7 @@ class TestListener : RunListener() {
 }
 
 data class HandlerOutput(val startTime: Long,
+                         val runtime: Long,
                          val coldStart: Boolean,
                          val wasSuccess: Boolean,
                          val failures: MutableList<Failure>)
@@ -39,12 +40,12 @@ class RunTests {
     }
 
     private fun createString(startTime : Long, result: Result):String {
-        return "{\"startTime\": ${startTime}, \"coldStart\": ${isColdStart()}, \"wasSuccess\": ${result.wasSuccessful()}," +
+        return "{\"startTime\": ${startTime}, \"runtime\": ${result.runTime}, \"coldStart\": ${isColdStart()}, \"wasSuccess\": ${result.wasSuccessful()}," +
                 " \"failures\": ${result.failures}}"
     }
 
     private fun createJson(startTime: Long, result: Result) : HandlerOutput{
-        return HandlerOutput(startTime, isColdStart(), result.wasSuccessful(), result.failures)
+        return HandlerOutput(startTime, result.runTime, isColdStart(), result.wasSuccessful(), result.failures)
     }
 
     private fun isColdStart(): Boolean{
